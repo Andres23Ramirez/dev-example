@@ -3,7 +3,7 @@ services:
     docker-db:
       platform: linux/arm64/v8
       image: "postgres:15-alpine3.17"
-      container_name: db
+      container_name: docker-db
       ports:
           - "5432:5432"
       environment:
