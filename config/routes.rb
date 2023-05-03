@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   post "blobs/create", to: "blobs#create"
+  get  "blobs/:id", to: "blobs#show"
 end
