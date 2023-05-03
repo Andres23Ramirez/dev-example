@@ -1,26 +1,21 @@
 require 'rails_helper'
 
+require 'rails_helper'
+
 RSpec.describe Blob, type: :model do
-  describe "validations" do
-    it "is invalid without a document_id" do
-      blob = Blob.new(document_filename: "test.json", data: "some data")
-      expect(blob).to_not be_valid
-    end
 
-    it "is invalid without a document_filename" do
-      blob = Blob.new(document_id: "1234", data: "some data")
-      expect(blob).to_not be_valid
-    end
+  subject { described_class.new(document_id: '1234', document_filename: 'test.txt', data: {name: 'test'}) }
 
-    it "is invalid without data" do
-      blob = Blob.new(document_id: "1234", document_filename: "test.json")
-      expect(blob).to_not be_valid
-    end
-
-    it "is valid with all required attributes" do
-      blob = Blob.new(document_id: "1234", document_filename: "test.json", data: "some data")
-      expect(blob).to be_valid
+  it 'validates presence of required attributes' do
+    required_attributes = [:document_id, :document_filename, :data]
+    required_attributes.each do |attr|
+      subject[attr] = nil
+      expect(subject).not_to be_valid
+      expect(subject.errors[attr]).to include("can't be blank")
     end
   end
-end
 
+  it 'is valid with valid attributes' do
+    expect(subject).to be_valid
+  end
+end
