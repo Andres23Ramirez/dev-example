@@ -4,17 +4,21 @@ class BlobsController < ApplicationController
 
   # POST /blobs/create
   def create
-    json = params["blob"].as_json
-    uuid = SecureRandom.uuid
-    filename = uuid + ".json"
+    begin
+      json = params["blob"].as_json
+      uuid = SecureRandom.uuid
+      filename = uuid + ".json"
 
-    if File.write("received_files/" + filename, JSON.pretty_generate(json))
-      json["document_id"] = uuid
-      json["document_filename"] = filename
-      AdjustedBankTransaction.new(params["blob"].tempfile,uuid).call
-      render json: json, status: 201
-    else
-      render json: {error: "unprocessible_entry"}, status: 422
+      if File.write("received_files/" + filename, JSON.pretty_generate(json))
+        json["document_id"] = uuid
+        json["document_filename"] = filename
+        AdjustedBankTransaction.new(params["blob"].tempfile, uuid).call
+        render json: json, status: 201
+      else
+        render json: { error: "unprocessible_entry" }, status: 422
+      end
+    rescue StandardError => e
+      render json: { error: "Error processing request: #{e.message}" }, status: 500
     end
   end
 end
