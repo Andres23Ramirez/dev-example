@@ -47,7 +47,6 @@ group :development, :test do
   gem "guard-rails"
   gem "guard-rspec"
   gem "json_matchers"
-  gem 'factory_bot_rails'
 
 end
 
